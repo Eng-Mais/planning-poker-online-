@@ -26,7 +26,6 @@ export class CreatingGameComponent {
   }
 
   selectGame(game: string): void {
-    console.log('Selected game:', game);
     this.selectedGame = game; 
     this.showDropdown = false;
   }
@@ -35,10 +34,7 @@ export class CreatingGameComponent {
     const gameName = this.name.value || 'planning poker game'; 
     const gameType = this.selectedGame; 
 
-    console.log('Creating game with name:', gameName);
-    console.log('Selected game type:', gameType);
-    
-    // Set the game name and type using UserService
+
     this.userService.setGameName(gameName);
     this.userService.setGameType(gameType);
     this.storageService.clearStoredCards();

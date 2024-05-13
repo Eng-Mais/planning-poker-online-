@@ -75,16 +75,10 @@ export class MainGameComponent implements OnInit, OnChanges{
   
   
   onCardClick(card: number): void {
-    console.log('Clicked card:', card);
     this.selectedCard = card;
     this.cardsPicked = true;
-    console.log("Stored:", this.selectedCard);
   }
 
-  revealCards(): void {
-    console.log('Revealing cards...');
-
-  }
 
   startCountdown(): void {
     this.countdownStarted = true;
@@ -106,13 +100,11 @@ export class MainGameComponent implements OnInit, OnChanges{
         this.countdownInProgress = false;
         this.countdownFinished = true;
         this.countdownValue = 0; 
-        this.revealCards()
       }
     }, 800);
   }
 
   finsihCountdown(): void{
-    console.log("countdown fisnihed");
     this.countdownStarted = false;
     this.countdownInProgress = false;
     this.countdownFinished = true;
@@ -123,7 +115,6 @@ export class MainGameComponent implements OnInit, OnChanges{
 
   calculateAverage(): void {
     const selectedCards: number[] = this.storageService.getStoredCards();
-    console.log("all stored cards:", selectedCards)
     const sum = selectedCards.reduce((acc, card) => acc + card, 0);
     const average = selectedCards.length > 0 ? sum / selectedCards.length : 0;
     this.average = parseFloat(average.toFixed(2));

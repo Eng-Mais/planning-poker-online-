@@ -24,7 +24,6 @@ export class StorageService {
     const selectedCards: number[] = JSON.parse(localStorage.getItem(this.selectedCardsKey) || '[]');
     selectedCards.push(card);
     localStorage.setItem(this.selectedCardsKey, JSON.stringify(selectedCards));
-    console.log("Stored cards:", selectedCards);
   }
   
   // Retrieve all stored cards
