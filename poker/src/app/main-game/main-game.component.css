@@ -425,6 +425,10 @@
     transition: background-color 0.3s ease;
 }
 
+.newVotingbtn:hover{
+    cursor: pointer;
+}
+
 
 .voting_Results {
     display: flex;

@@ -3,6 +3,8 @@ import { FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UserService } from '../user.service'; 
 import { HostListener } from '@angular/core';
+import { StorageService } from '../storage.service';
+
 @Component({
   selector: 'app-creating-game',
   templateUrl: './creating-game.component.html',
@@ -16,7 +18,7 @@ export class CreatingGameComponent {
   showDropdown = false;
   selectedGame: string = "";
 
-  constructor(private router: Router, private userService: UserService) {} 
+  constructor(private router: Router, private userService: UserService, private storageService: StorageService) {} 
 
   toggleDropdown(event: MouseEvent): void {
     event.stopPropagation(); // Prevent event bubbling to the document
@@ -39,8 +41,11 @@ export class CreatingGameComponent {
     // Set the game name and type using UserService
     this.userService.setGameName(gameName);
     this.userService.setGameType(gameType);
+    this.storageService.clearStoredCards();
+    this.storageService.clearDisplayName()
     this.router.navigate(['/main-game']);
   }
+
 
   @HostListener('document:click', ['$event'])
   onClick(event: MouseEvent): void {

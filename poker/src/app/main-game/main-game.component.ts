@@ -1,16 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnChanges, SimpleChanges, Input } from '@angular/core';
 import { UserService } from '../user.service'; 
+import { StorageService } from '../storage.service';
 
 @Component({
   selector: 'app-main-game',
   templateUrl: './main-game.component.html',
   styleUrls: ['./main-game.component.css']
 })
-export class MainGameComponent implements OnInit {
-  gameName: string = ''; 
+export class MainGameComponent implements OnInit, OnChanges{
+  gameName: string | null = "";
   gameType: string = ''; 
   cardList: number[] = [];
-  selectedCard: number | null = null; 
+  @Input() selectedCard: number = 0;
+  lastClickedCard: number | null = null;
   cardsPicked: boolean = false;
   countdownStarted: boolean = false;
   countdownValue: number = 2;
@@ -19,11 +21,22 @@ export class MainGameComponent implements OnInit {
   average: number =0;
   selectedCards: number[] = [];
 
-  constructor(private userService: UserService) {}
+  constructor(private userService: UserService, private storageService: StorageService) {
+   
+  }
 
   ngOnInit(): void {
-    this.gameName = this.userService.getGameName();
+    this.userService.gameName$.subscribe(gameName => {
+      this.gameName = gameName;
+    });
     this.gameType = this.userService.getGameType();
+    const storedDisplayName = this.storageService.getDisplayName();
+    if (storedDisplayName) {
+      this.displayNameEntered = true;
+      this.displayName = storedDisplayName;
+      this.register = false;
+      this.overlay = false;
+    }
 
     if (this.gameType.includes('Fibonacci')) {
       this.cardList = [0, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89];
@@ -35,24 +48,37 @@ export class MainGameComponent implements OnInit {
   }
 
 
+
   displayNameEntered = false;
   displayName: string = '';
   register = true;
   overlay = true;
   submitDisplayName(): void {
-      if (this.displayName.trim() !== '') {
-          this.displayNameEntered = true;
-          this.register = false;
-          this.overlay = false;
-      }
+    if (this.displayName.trim() !== '') {
+      this.displayNameEntered = true;
+      this.register = false;
+      this.overlay = false;
+      // Store display name in the storage service
+      this.storageService.setDisplayName(this.displayName);
+    }
   }
 
+  
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['selectedCard']) {
+      this.storageService.storeLastClickedCard(this.selectedCard);
+      console.log("Stored:", this.selectedCard);
+    }
 
+  }
+  
+  
+  
   onCardClick(card: number): void {
     console.log('Clicked card:', card);
-    this.selectedCard = card; 
+    this.selectedCard = card;
     this.cardsPicked = true;
-    this.calculateAverage(card); 
+    console.log("Stored:", this.selectedCard);
   }
 
   revealCards(): void {
@@ -64,6 +90,9 @@ export class MainGameComponent implements OnInit {
     this.countdownStarted = true;
     this.countdownInProgress = true;
     this.updateCountdown();
+    this.storageService.storeLastClickedCard(this.selectedCard);
+    this.calculateAverage();
+
   }
   
   updateCountdown(): void {
@@ -87,23 +116,17 @@ export class MainGameComponent implements OnInit {
     this.countdownStarted = false;
     this.countdownInProgress = false;
     this.countdownFinished = true;
+    location.reload();
   }
-  calculateAverage(selectedCard: number): void {
-    // Add the selected card to the array of selected cards
-    this.selectedCards.push(selectedCard);
 
-    // Calculate the sum of selected cards
-    let sum = 0;
-    for (const card of this.selectedCards) {
-        sum += card;
-    }
+  selectedCardsKey = 'selectedCards';
 
-    // Calculate the average
-    if (this.selectedCards.length > 0) {
-        this.average = sum / this.selectedCards.length;
-    } else {
-        this.average = 0; // Set average to 0 if no cards are selected to avoid division by zero
-    }
+  calculateAverage(): void {
+    const selectedCards: number[] = this.storageService.getStoredCards();
+    console.log("all stored cards:", selectedCards)
+    const sum = selectedCards.reduce((acc, card) => acc + card, 0);
+    const average = selectedCards.length > 0 ? sum / selectedCards.length : 0;
+    this.average = parseFloat(average.toFixed(2));
 }
 
 }
