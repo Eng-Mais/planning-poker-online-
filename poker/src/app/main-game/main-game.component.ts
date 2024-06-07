@@ -1,6 +1,8 @@
 import { Component, OnInit, OnChanges, SimpleChanges, Input } from '@angular/core';
 import { UserService } from '../user.service'; 
 import { StorageService } from '../storage.service';
+import { HostListener } from '@angular/core';
+
 
 @Component({
   selector: 'app-main-game',
@@ -62,12 +64,19 @@ export class MainGameComponent implements OnInit, OnChanges{
       this.storageService.setDisplayName(this.displayName);
     }
   }
-
+  isDropdownOpen = false;
+  toggleDropdown(event: MouseEvent): void {
+    event.stopPropagation(); 
+    this.isDropdownOpen = !this. isDropdownOpen;
+  }
+  @HostListener('document:click', ['$event'])
+  onClick(event: MouseEvent): void {
+    this.isDropdownOpen = false; 
+  }
   
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['selectedCard']) {
       this.storageService.storeLastClickedCard(this.selectedCard);
-      console.log("Stored:", this.selectedCard);
     }
 
   }
@@ -78,7 +87,6 @@ export class MainGameComponent implements OnInit, OnChanges{
     this.selectedCard = card;
     this.cardsPicked = true;
   }
-
 
   startCountdown(): void {
     this.countdownStarted = true;
@@ -119,5 +127,6 @@ export class MainGameComponent implements OnInit, OnChanges{
     const average = selectedCards.length > 0 ? sum / selectedCards.length : 0;
     this.average = parseFloat(average.toFixed(2));
 }
+
 
 }

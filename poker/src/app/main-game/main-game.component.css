@@ -70,6 +70,7 @@
     flex-direction: row;
     align-items: center;
     text-decoration: solid;
+    overflow-x: hidden;
  }
  
  .game-entered p{
@@ -116,7 +117,6 @@
 .user-card {
     display: flex;
     flex-direction: row;
-    overflow: hidden;
     text-align: left;
     width: 120px;
     margin: 0;
@@ -160,13 +160,54 @@
     color: #409afa;
     font-family: Arial, Helvetica, sans-serif;
 }
+.image-icon:hover{
+    cursor: pointer;
+}
+.dropdown-container {
+    position: relative; 
+    display: inline-block;
+  }
+  .dropdown-menu {
+    position: absolute;
+    top: 100%; 
+    left: 0;
+    background-color: white;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000; 
+    margin-top: 16px; 
+    border-radius: 5px;
+    min-width: 120px;
+  }
+  
+  .dropdown-menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .dropdown-menu li {
+    padding: 10px;
+    font-family: Arial, Helvetica, sans-serif;
+    padding: 10px 20px;
+    white-space: nowrap;
+  }
+  
+  .dropdown-menu li a {
+    text-decoration: none;
+    color: black;
+    display: block;
+  }
+  
+  .dropdown-menu li:hover {
+    background-color: #deecfc;
+  }
 
 .invitation-box {
     height: 30px;
     width: 172px;
     border: 2px solid #409afa;
     border-radius: 7px;
-    overflow: hidden;
     display: flex;
     padding: 5px;
     align-items: center; 
@@ -440,12 +481,18 @@
 .votingLeft, .votingRight {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    align-items: center;
+
 }
 .votingRight{
     margin-bottom: 30px;
+}
+
+.votingLeft{
+    display: flex;
+    align-items: center; 
+    justify-content: center;
+    align-content: center;
+
 }
 .vote_count p{
     font-family: Arial, Helvetica, sans-serif;
@@ -456,6 +503,9 @@
     height: 80px;
     background-color: rgb(23, 23, 23);
     border-radius: 10px;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
 
     
 }
@@ -486,6 +536,9 @@
     font-size: 25px;
     font-family: Arial, Helvetica, sans-serif;
     color: #0a0a0a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .Agreement img {
@@ -512,4 +565,5 @@
     align-items: center;
     justify-content: center;
     font-family: Arial, Helvetica, sans-serif;
+    align-content: center;
 }

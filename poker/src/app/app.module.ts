@@ -6,7 +6,7 @@ import { CommonModule } from '@angular/common';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { CreatingGameComponent } from './creating-game/creating-game.component'; // Import the CreatingGameComponent
+import { CreatingGameComponent } from './creating-game/creating-game.component'; 
 import { MainGameComponent } from './main-game/main-game.component';
 
 @NgModule({
